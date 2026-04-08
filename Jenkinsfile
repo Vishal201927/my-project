@@ -2,13 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // Path to your Tomcat installation
-        TOMCAT_HOME = "C:\\apache-tomcat"  
-        // Path to the WAR file Maven produces
-        WAR_FILE = "target/my-project-1.0-SNAPSHOT.war"
-        // Git repository
-        GIT_URL = "https://github.com/Vishal201927/my-project.git"
-        GIT_BRANCH = "master"
+        TOMCAT_HOME = "C:\\apache-tomcat"  // Change to your Tomcat path
+        WAR_FILE = "target\\my-project-1.0-SNAPSHOT.war"
     }
 
     stages {
@@ -16,20 +11,20 @@ pipeline {
         stage('Code Checkout') {
             steps {
                 echo "Checking out code from Git"
-                git branch: "${env.GIT_BRANCH}", url: "${env.GIT_URL}"
+                git branch: 'master', url: 'https://github.com/Vishal201927/my-project.git'
             }
         }
 
         stage('Build') {
             steps {
-                echo "Building the project with Maven"
+                echo "Building the project"
                 bat 'mvn clean package'
             }
         }
 
         stage('Test') {
             steps {
-                echo "Running Maven tests"
+                echo "Running tests"
                 bat 'mvn test'
             }
         }
@@ -37,13 +32,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo "Deploying WAR to Tomcat"
-                // Stop Tomcat (optional)
-                bat "taskkill /F /IM java.exe || exit 0" 
-                // Copy WAR to webapps folder
-                bat "copy /Y ${env.WAR_FILE} ${env.TOMCAT_HOME}\\webapps\\"
-                // Start Tomcat
-                bat "${env.TOMCAT_HOME}\\bin\\startup.bat"
-                echo "WAR deployed and Tomcat started"
+                bat """\
+                copy /Y "%WORKSPACE%\\${WAR_FILE}" "%TOMCAT_HOME%\\webapps\\my-project.war"
+                """
             }
         }
     }
