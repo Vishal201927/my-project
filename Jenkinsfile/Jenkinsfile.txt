@@ -15,8 +15,9 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying the application...'
-                bat 'copy target\\*.war C:\\apache-tomcat-9.0.117\\webapps\\'
+                echo 'Deploying to Tomcat...'
+                // Copy WAR to Tomcat webapps folder
+                bat 'copy target\\my-project.war C:\\apache-tomcat-9.0.117\\webapps\\'
             }
         }
     }
