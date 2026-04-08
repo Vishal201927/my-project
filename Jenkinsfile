@@ -2,8 +2,11 @@ pipeline {
     agent any
 
     environment {
-        TOMCAT_HOME = "C:\\apache-tomcat"  // Change to your Tomcat path
-        WAR_FILE = "target\\my-project-1.0-SNAPSHOT.war"
+        // Correct Tomcat path
+        TOMCAT_HOME = "C:\\apache-tomcat-9.0.117-windows-x64"
+
+        // WAR file path after Maven build
+        WAR_FILE = "${WORKSPACE}\\target\\my-project-1.0-SNAPSHOT.war"
     }
 
     stages {
@@ -32,9 +35,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo "Deploying WAR to Tomcat"
-                bat """\
-                copy /Y "%WORKSPACE%\\${WAR_FILE}" "%TOMCAT_HOME%\\webapps\\my-project.war"
-                """
+                // Correct Windows copy command with quotes
+                bat "copy /Y \"${WAR_FILE}\" \"${TOMCAT_HOME}\\webapps\\my-project.war\""
             }
         }
     }
