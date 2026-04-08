@@ -1,32 +1,39 @@
 pipeline {
     agent any
+
     stages {
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'master', url: 'https://github.com/Vishal201927/my-project'
+            }
+        }
+
         stage('Build') {
             steps {
-                echo 'Building the project...'
                 bat 'mvn clean package'
             }
         }
+
         stage('Test') {
             steps {
-                echo 'Running tests...'
                 bat 'mvn test'
             }
         }
+
         stage('Deploy') {
             steps {
-                echo 'Deploying to Tomcat...'
-                // Copy WAR to Tomcat webapps folder
-                bat 'copy target\\my-project.war C:\\apache-tomcat-9.0.117\\webapps\\'
+                bat 'copy target\\*.war C:\\apache-tomcat-9.0\\webapps'
             }
         }
     }
+
     post {
         success {
-            echo 'Pipeline completed successfully!'
+            echo 'Pipeline Success!'
         }
         failure {
-            echo 'Pipeline failed. Check logs.'
+            echo 'Pipeline Failed!'
         }
     }
 }
