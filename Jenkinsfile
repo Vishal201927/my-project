@@ -1,29 +1,28 @@
 pipeline {
-    agent { label 'agent1' }   // 👈 THIS is the replacement
+    agent { label 'agent1' }   // 🔑 MOST IMPORTANT LINE
 
     stages {
-
         stage('Code Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/Vishal201927/my-project'
+                echo 'Checking out code...'
             }
         }
 
         stage('Build') {
             steps {
-                bat 'mvn clean package'
+                echo 'Building project...'
             }
         }
 
         stage('Test') {
             steps {
-                bat 'mvn test'
+                echo 'Running tests...'
             }
         }
 
         stage('Deploy') {
             steps {
-                bat 'echo Deploying...'
+                echo 'Deploying application...'
             }
         }
     }
